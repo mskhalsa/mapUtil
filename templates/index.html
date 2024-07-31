@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map { height: 90vh; }
+        .btn { padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer; margin: 5px; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <button id="done-btn" class="btn">Done</button>
+    <button id="remove-btn" class="btn">Remove Last</button>
+    <script>
+        let map = L.map('map').setView([37.7749, -122.4194], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        let points = [];
+        let markers = [];
+
+        map.on('click', function(e) {
+            let lat = e.latlng.lat;
+            let lng = e.latlng.lng;
+            points.push([lat, lng]);
+            let marker = L.marker([lat, lng]).addTo(map);
+            markers.push(marker);
+        });
+
+        document.getElementById('done-btn').addEventListener('click', function() {
+            $.ajax({
+                type: 'POST',
+                url: '/export',
+                contentType: 'application/json',
+                data: JSON.stringify({ points: points }),
+                success: function(response) {
+                    console.log('Exported points:', response);
+                }
+            });
+        });
+
+        document.getElementById('remove-btn').addEventListener('click', function() {
+            if (markers.length > 0) {
+                let lastMarker = markers.pop();
+                map.removeLayer(lastMarker);
+                points.pop();
+            }
+        });
+    </script>
+</body>
+</html>
