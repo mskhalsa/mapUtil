@@ -6,14 +6,18 @@
     <title>Interactive Map</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch/dist/geosearch.css"/>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-geosearch/dist/bundle.min.js"></script>
     <style>
-        #map { height: 90vh; }
+        #map { height: 80vh; }
         .btn { padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer; margin: 5px; }
+        .search-bar { padding: 10px; background-color: #f1f1f1; margin: 5px; }
     </style>
 </head>
 <body>
     <div id="map"></div>
+    <div class="search-bar" id="search-bar"></div>
     <button id="done-btn" class="btn">Done</button>
     <button id="remove-btn" class="btn">Remove Last</button>
     <script>
@@ -51,6 +55,32 @@
                 map.removeLayer(lastMarker);
                 points.pop();
             }
+        });
+
+        const provider = new window.GeoSearch.OpenStreetMapProvider();
+
+        const searchControl = new window.GeoSearch.GeoSearchControl({
+            provider: provider,
+            style: 'bar',
+            autoComplete: true,
+            autoCompleteDelay: 250,
+            showMarker: true,
+            showPopup: false,
+            marker: {
+                icon: new L.Icon.Default(),
+                draggable: false,
+            },
+            updateMap: true,
+        });
+
+        map.addControl(searchControl);
+
+        map.on('geosearch/showlocation', function(e) {
+            let lat = e.location.y;
+            let lng = e.location.x;
+            points.push([lat, lng]);
+            let marker = L.marker([lat, lng]).addTo(map);
+            markers.push(marker);
         });
     </script>
 </body>
