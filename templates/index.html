@@ -15,19 +15,50 @@
         .remove-btn { padding: 10px; background-color: #ff0000; color: white; border: none; cursor: pointer; margin: 5px; }
         .search-bar { padding: 10px; background-color: #f1f1f1; margin: 5px; }
         .coordinates { position: absolute; padding: 5px; background-color: rgba(255, 255, 255, 0.8); border: 1px solid #ccc; border-radius: 3px; pointer-events: none; z-index: 1000; }
+        .map-layers { margin: 5px; }
+        .layer-btn { padding: 8px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin-right: 5px; }
+        .layer-btn.active { background-color: #2E7D32; }
     </style>
 </head>
 <body>
     <div id="map"></div>
     <div class="search-bar" id="search-bar"></div>
+    <div class="map-layers">
+        <button id="streets-btn" class="layer-btn active">Streets</button>
+        <button id="satellite-btn" class="layer-btn">Satellite</button>
+    </div>
     <button id="done-btn" class="btn">Done</button>
     <button id="remove-btn" class="remove-btn">Remove Last</button>
     <div class="coordinates" id="coordinates">Lat: , Lng: </div>
     <script>
         let map = L.map('map').setView([37.7749, -122.4194], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        
+        // Define tile layers
+        const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+        });
+        
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        });
+        
+        // Add street layer by default
+        streetLayer.addTo(map);
+        
+        // Layer switch functionality
+        document.getElementById('streets-btn').addEventListener('click', function() {
+            map.removeLayer(satelliteLayer);
+            map.addLayer(streetLayer);
+            document.getElementById('streets-btn').classList.add('active');
+            document.getElementById('satellite-btn').classList.remove('active');
+        });
+        
+        document.getElementById('satellite-btn').addEventListener('click', function() {
+            map.removeLayer(streetLayer);
+            map.addLayer(satelliteLayer);
+            document.getElementById('satellite-btn').classList.add('active');
+            document.getElementById('streets-btn').classList.remove('active');
+        });
 
         let points = [];
         let markers = [];
