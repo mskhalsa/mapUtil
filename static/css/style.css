@@ -1,0 +1,120 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+}
+.header {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #444;
+}
+#map { 
+    height: 75vh; 
+    cursor: crosshair;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px 0;
+    align-items: center;
+}
+.btn { 
+    padding: 10px 15px; 
+    background-color: #4361ee; 
+    color: white; 
+    border: none; 
+    cursor: pointer; 
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.btn:hover {
+    background-color: #3a56d4;
+    transform: translateY(-2px);
+}
+.remove-btn { 
+    background-color: #ef476f;
+}
+.remove-btn:hover {
+    background-color: #d13963;
+}
+.search-bar { 
+    flex-grow: 1;
+}
+.coordinates { 
+    position: absolute; 
+    padding: 6px; 
+    background-color: rgba(255, 255, 255, 0.9); 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    pointer-events: none; 
+    z-index: 1000; 
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Toggle Switch */
+.switch-container {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    margin: 0 10px;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+input:checked + .slider {
+    background-color: #06d6a0;
+}
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+.map-type {
+    font-weight: 500;
+    color: #555;
+}
+.stats {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
